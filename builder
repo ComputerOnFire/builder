@@ -259,9 +259,13 @@ if [ ! -e "$IMAGE_ZIP" ]; then
     _get_image
 fi
 
+echo "decompress :)"
 _decompress_image
+echo "resize :)"
 _resize_image
+echo "open :)"
 _open_image
+echo "modify :)"
 
 if [[ "$1" == "--chroot" ]] ; then
     _modify_image
