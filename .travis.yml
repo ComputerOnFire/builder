@@ -10,15 +10,14 @@ go:
 services:
   - docker
 
-#before_install:
-#  - sudo add-apt-repository "deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ focal universe"
-#  - sudo apt-get update
-#  - sudo apt-get install qemu-user-static
+before_install:
+  - sudo add-apt-repository "deb http://ports.ubuntu.com/ubuntu-ports/ focal universe"
+  - sudo apt-get update
+  - sudo apt-get install qemu-user-static
 
 addons:
   apt:
     packages:
-      - qemu-user-static
       - jq
       - kpartx
       - aria2
