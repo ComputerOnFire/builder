@@ -84,16 +84,23 @@ function _enable_ld_preload {
 }
 
 function _resize_image {
+echo 1
     RESIZE_IMAGE_PATH=images/$RASPBIAN_IMAGE_FILE
+echo 2
     if [[ -L "images" ]];
     then
         rsync -Pav "images/$RASPBIAN_IMAGE_FILE" .
+echo 3
         RESIZE_IMAGE_PATH=$RASPBIAN_IMAGE_FILE
+echo 4
     fi
 
     start_sector=$(fdisk -l "$RESIZE_IMAGE_PATH" | awk -F" "  '{ print $2 }' | sed '/^$/d' | sed -e '$!d')
+echo 5
     truncate -s +$EXTRA_IMAGE_SIZE "$RESIZE_IMAGE_PATH"
+echo 6
     losetup /dev/loop1 "$RESIZE_IMAGE_PATH"
+echo 7
     fdisk /dev/loop1 <<EOF
 p
 d
@@ -106,15 +113,23 @@ $start_sector
 p
 w
 EOF
+echo 8
     losetup -d /dev/loop1
+echo 9
     losetup -o $((start_sector*512)) /dev/loop2 "$RESIZE_IMAGE_PATH"
+echo 10
     e2fsck -f /dev/loop2
+echo 11
     resize2fs -f /dev/loop2
+echo 12
     losetup -d /dev/loop2
+echo 13
     if [[ -L "images" ]];
     then
         rsync -Pav "$RASPBIAN_IMAGE_FILE" images/
+echo 14
         rm "$RASPBIAN_IMAGE_FILE"
+echo 15
     fi
 }
 
