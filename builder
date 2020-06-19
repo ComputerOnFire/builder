@@ -84,26 +84,27 @@ function _enable_ld_preload {
 }
 
 function _resize_image {
-echo 1
     RESIZE_IMAGE_PATH=images/$RASPBIAN_IMAGE_FILE
-    sync;sync;sync
-    tree .
-echo 2
+
     if [[ -L "images" ]];
     then
         rsync -Pav "images/$RASPBIAN_IMAGE_FILE" .
-echo 3
         RESIZE_IMAGE_PATH=$RASPBIAN_IMAGE_FILE
-echo 4
     fi
-echo $RESIZE_IMAGE_PATH
-fdisk -l "$RESIZE_IMAGE_PATH"
     start_sector=$(fdisk -l "$RESIZE_IMAGE_PATH" | awk -F" "  '{ print $2 }' | sed '/^$/d' | sed -e '$!d')
 echo 5
+echo $RESIZE_IMAGE_PATH
+fdisk -l "$RESIZE_IMAGE_PATH"
     truncate -s +$EXTRA_IMAGE_SIZE "$RESIZE_IMAGE_PATH"
 echo 6
+sync;sync;sync
+tree .
+echo $RESIZE_IMAGE_PATH
+fdisk -l "$RESIZE_IMAGE_PATH"
     losetup /dev/loop1 "$RESIZE_IMAGE_PATH"
 echo 7
+ls -al /dev/mapper/loop*
+df -h
     fdisk /dev/loop1 <<EOF
 p
 d
