@@ -18,6 +18,7 @@ services:
 addons:
   apt:
     packages:
+      - qemu-user-static
       - jq
       - kpartx
       - aria2
