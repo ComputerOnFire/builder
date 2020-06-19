@@ -96,7 +96,8 @@ echo 3
         RESIZE_IMAGE_PATH=$RASPBIAN_IMAGE_FILE
 echo 4
     fi
-
+echo $RESIZE_IMAGE_PATH
+fdisk -l "$RESIZE_IMAGE_PATH"
     start_sector=$(fdisk -l "$RESIZE_IMAGE_PATH" | awk -F" "  '{ print $2 }' | sed '/^$/d' | sed -e '$!d')
 echo 5
     truncate -s +$EXTRA_IMAGE_SIZE "$RESIZE_IMAGE_PATH"
