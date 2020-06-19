@@ -86,6 +86,8 @@ function _enable_ld_preload {
 function _resize_image {
 echo 1
     RESIZE_IMAGE_PATH=images/$RASPBIAN_IMAGE_FILE
+    sync;sync;sync
+    tree .
 echo 2
     if [[ -L "images" ]];
     then
