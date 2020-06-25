@@ -3,9 +3,9 @@ dist: bionic
 arch: arm64
 os: linux
 
-language: go
-go:
-  - "1.14.x"
+#language: go
+#go:
+#  - "1.14.x"
 
 services:
   - docker
