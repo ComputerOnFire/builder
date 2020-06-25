@@ -26,7 +26,14 @@ addons:
 
 before_script: df -h
 
-script: mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
+#script: mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
+
+script:
+  - wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.4.0-amd64-netinst.iso
+  - mount -t iso9660 -o debian-10.4.0-amd64-netinst.iso images
+  - tree
+  - df -H
+  - ls -l
 
 env:
   global:
