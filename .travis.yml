@@ -3,40 +3,30 @@ dist: bionic
 arch: arm64
 os: linux
 
-language: node_js
-node_js:
-  - "8"
+language: go
+go:
+  - "1.14.x"
 
 services:
   - docker
 
-    #before_install:
-#  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 04EE7237B7D453EC 648ACFD622F3D138 DCC9EFBF77E11517
-#  - sudo add-apt-repository "deb http://deb.debian.org/debian buster main contrib"
-# - sudo add-apt-repository "deb http://ports.ubuntu.com/ubuntu-ports/ focal universe"
-#  - sudo apt-get update
-#  - sudo apt-get install qemu-user-static
+before_install:
+  - sudo add-apt-repository "deb http://ports.ubuntu.com/ubuntu-ports/ focal universe"
+  - sudo apt-get update
+  - sudo apt-get install qemu-user-static
 
 addons:
   apt:
     packages:
+      - jq
       - kpartx
       - aria2
       - tree
       - python-requests
-      - jq
 
-        #script: mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
-    script:
-      - mkdir images
-      - wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.4.0-amd64-netinst.iso
-      - sudo mount -t iso9660 -o loop debian-10.4.10-amd64-netinst.iso images
-      - mount
-      - tree
-      - df -H
-      - ls -l
-        # - sudo PATH=./node_modules/.bin:$PATH
-        # - ./builder --noninteractive 
+before_script: df -h
+
+script: mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
 
 env:
   global:
