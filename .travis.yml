@@ -26,7 +26,17 @@ addons:
       - python-requests
       - jq
 
-script: mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
+        #script: mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
+    script:
+      - mkdir images
+      - wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.4.0-amd64-netinst.iso
+      - sudo mount -t iso9660 -o loop debian-10.4.10-amd64-netinst.iso images
+      - mount
+      - tree
+      - df -H
+      - ls -l
+        # - sudo PATH=./node_modules/.bin:$PATH
+        # - ./builder --noninteractive 
 
 env:
   global:
