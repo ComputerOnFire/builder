@@ -31,7 +31,7 @@ before_script: df -h
 script:
   - wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.4.0-amd64-netinst.iso
   - sudo mkdir /mnt/testimg
-  - sudo mount -u -t iso9660 -o debian-10.4.0-amd64-netinst.iso /mnt/testimg
+  - sudo mount -t iso9660 -o debian-10.4.0-amd64-netinst.iso /mnt/testimg
   - mount
   - tree
   - df -H
