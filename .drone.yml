@@ -1,7 +1,30 @@
-pipeline:
-  build:
-    image: node:latest
-    commands: npm install
-  test:
-    image: node:latest
-    commands: npm run test
+kind: pipeline
+type: docker
+name: amd64
+
+platform:
+  arch: amd64
+
+steps:
+- name: build
+  image: golang
+  commands:
+  - go version
+  - go build
+  - go test
+
+---
+kind: pipeline
+type: docker
+name: arm
+
+platform:
+  arch: arm64
+
+steps:
+- name: build
+  image: golang
+  commands:
+  - go version
+  - go build
+  - go test
