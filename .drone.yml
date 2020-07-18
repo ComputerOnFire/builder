@@ -7,10 +7,9 @@ platform:
 
 steps:
 - name: build
-  image: golang
+  image: docker
   commands:
   - echo "Hello World!"
-  - go version
   - docker version
   - echo "Hello Dogi! This is a armhf drone runner!"
 
@@ -24,9 +23,8 @@ platform:
 
 steps:
 - name: build
-  image: golang
+  image: docker
   commands:
   - echo "Hello World!"
-  - go version
   - docker version
   - echo "Hello Dogi! This is a arm64 drone runner!"
