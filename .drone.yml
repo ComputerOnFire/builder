@@ -25,6 +25,7 @@ platform:
 steps:
 - name: build
   image: golang
+  commands:
   - echo "Hello World!"
   - go version
   - docker version
