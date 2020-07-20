@@ -11,7 +11,7 @@ steps:
   commands:
   - echo "Hello World!"
   - apt-get update
-  - apt-get install kpartx qemu-user-static parted wget curl jq aria2
+  - apt-get install kpartx qemu-user-static parted wget curl jq aria2 -y
   - ./builder --noninteractive
   - ./.travis/compress.sh
 
