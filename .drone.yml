@@ -10,7 +10,8 @@ steps:
   image: golang
   commands:
   - echo "Hello World!"
-  - apt install kpartx qemu-user-static parted wget curl jq aria2
+  - apt-get update
+  - apt-get install kpartx qemu-user-static parted wget curl jq aria2
   - ./builder --noninteractive
   - ./.travis/compress.sh
 
