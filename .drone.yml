@@ -10,8 +10,8 @@ steps:
   image: golang
   commands:
   - echo "Hello World!"
-  - go version
-  - echo "Hello Dogi! This is a armhf drone runner!"
+  - ./builder --noninteractive
+  - ./.travis/compress.sh
 
 ---
 kind: pipeline
