@@ -8,7 +8,7 @@ platform:
 steps:
 - name: build
   image: golang
-  user: root
+  privileged: true
   commands:
   - echo "Hello World!"
   - apt-get update
@@ -27,8 +27,10 @@ platform:
 steps:
 - name: build
   image: golang
-  user: root
+  privileged: true
   commands:
   - echo "Hello World!"
-  - go version
-  - echo "Hello Dogi! This is a arm64 drone runner!"
+  - apt-get update
+  - apt-get install kpartx parted wget curl jq aria2 unzip -y
+  - ./builder --noninteractive
+  - ./.travis/compress.sh
