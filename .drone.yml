@@ -8,10 +8,11 @@ platform:
 steps:
 - name: build
   image: golang
+  user: root
   commands:
   - echo "Hello World!"
   - apt-get update
-  - apt-get install kpartx qemu-user-static parted wget curl jq aria2 -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip -y
   - ./builder --noninteractive
   - ./.travis/compress.sh
 
@@ -26,6 +27,7 @@ platform:
 steps:
 - name: build
   image: golang
+  user: root
   commands:
   - echo "Hello World!"
   - go version
