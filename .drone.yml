@@ -13,10 +13,10 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - apt-get dist-upgrade -y
   - apt-get update
+  - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 -y
-  - pip3 install requests
+  - python3 -m pip install requests
   - ./builder --noninteractive
   - ./.travis/compress.sh
 
@@ -39,7 +39,7 @@ steps:
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 -y
-  - pip3 install requests
+  - python3 -m pip install requests
   - ./builder --noninteractive
   - ./.travis/compress.sh
 
