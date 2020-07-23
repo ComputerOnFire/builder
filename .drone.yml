@@ -6,6 +6,19 @@ platform:
   arch: arm
 
 steps:
+- name: test
+  image: golang
+  environment:
+    GITHUB_KEY:
+      from_secret: api_key
+  privileged: true
+  commands:
+  - apt-get update
+  - apt-get dist-upgrade -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip -y
+  - python3 -m pip install requests
+  - mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive # --arm64 or --armhf, need to implement in builder
+  steps:
 - name: build
   image: golang
   environment:
@@ -13,13 +26,13 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - echo "$GITHUB_KEY"
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip -y
   - python3 -m pip install requests
-  - ./builder --noninteractive
+  - mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
   - ./.travis/compress.sh
+  - ./.travis/upload.sh
 
 ---
 kind: pipeline
@@ -30,6 +43,19 @@ platform:
   arch: arm64
 
 steps:
+- name: test
+  image: golang
+  environment:
+    GITHUB_KEY:
+      from_secret: api_key
+  privileged: true
+  commands:
+  - apt-get update
+  - apt-get dist-upgrade -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip -y
+  - python3 -m pip install requests
+  - mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
+steps:
 - name: build
   image: golang
   environment:
@@ -37,13 +63,17 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - echo "$GITHUB_KEY"
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip -y
   - python3 -m pip install requests
-  - ./builder --noninteractive
+  - mkdir images && sudo PATH=./node_modules/.bin:$PATH ./builder --noninteractive
   - ./.travis/compress.sh
+  - ./.travis/upload.sh
+  when:
+    event:
+      include:
+        - tag
 
 ---
 kind: secret
