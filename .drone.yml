@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: arm
+name: arm-test
 
 platform:
   arch: arm
@@ -22,7 +22,7 @@ steps:
 ---
 kind: pipeline
 type: docker
-name: arm
+name: arm-build
 
 platform:
   arch: arm
@@ -49,7 +49,7 @@ steps:
 ---
 kind: pipeline
 type: docker
-name: arm64
+name: arm64-test
 
 platform:
   arch: arm64
@@ -71,7 +71,7 @@ steps:
 ---
 kind: pipeline
 type: docker
-name: arm64
+name: arm64-build
 
 platform:
   arch: arm64
