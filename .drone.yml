@@ -32,7 +32,7 @@ steps:
   commands:
   - echo "Hello World!"
   - apt-get update
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-requests -y
   - apt-get dist-upgrade -y
   - ./builder --noninteractive
   - ./.travis/compress.sh
