@@ -8,6 +8,9 @@ platform:
 steps:
 - name: build
   image: golang
+  environment:
+    GITHUB_KEY:
+      from_secret: api_key
   privileged: true
   commands:
   - echo "Hello World!"
@@ -28,6 +31,9 @@ platform:
 steps:
 - name: build
   image: golang
+  environment:
+    GITHUB_KEY:
+      from_secret: api_key
   privileged: true
   commands:
   - echo "Hello World!"
@@ -36,3 +42,8 @@ steps:
   - apt-get dist-upgrade -y
   - ./builder --noninteractive
   - ./.travis/compress.sh
+
+---
+kind: secret
+name: api_key
+data: oQcHB87i8xm+rxKZHAw4eGZgLjhwjAQB25IvPc9L1uOHopL8Sf/zt+UTkQAZzAiS+ompEdEdt6Biecd4onUX7JpJNsY=
