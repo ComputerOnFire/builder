@@ -13,6 +13,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - echo "$GITHUB_KEY"
   - df -h
   - apt-get update
   - apt-get dist-upgrade -y
@@ -63,6 +64,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - echo "$GITHUB_KEY"
   - df -h
   - apt-get update
   - apt-get dist-upgrade -y
