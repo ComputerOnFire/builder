@@ -20,7 +20,7 @@ steps:
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive' # --arm64 or --armhf, need to implement in builder
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
 ---
 kind: pipeline
@@ -44,7 +44,7 @@ steps:
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive'
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
   - ./.travis/compress.sh
   - ./.travis/upload.sh
   when:
@@ -75,7 +75,7 @@ steps:
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive'
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
 ---
 kind: pipeline
@@ -99,7 +99,7 @@ steps:
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive'
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
   - ./.travis/compress.sh
   - ./.travis/upload.sh
   when:
