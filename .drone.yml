@@ -13,7 +13,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - df -h | grep 'loop'
+  - df -h
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
@@ -63,7 +63,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - df -h | grep 'loop'
+  - df -h
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
