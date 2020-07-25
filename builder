@@ -4,10 +4,10 @@ arch=$2
 
 # Raspbian
 #RASPBIAN_TORRENT_URL=downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip.torrent
-if [["$arch" == "--arm64"]]; then
+if [[ "$arch" == "--arm64" ]]; then
     RASPBIAN_TORRENT_URL=https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2020-05-28/2020-05-27-raspios-buster-arm64.zip.torrent
     RASPBIAN_SHA256=d06d8eecfa3980e18f9061777ca2dac50d98037373e1bd04e8726d79467dc7c7
-elif [["$arch" == "--armhf"]]; then
+elif [[ "$arch" == "--armhf" ]]; then
     RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-05-28/2020-05-27-raspios-buster-armhf.zip.torrent
     RASPBIAN_SHA256=b9a5c5321b3145e605b3bcd297ca9ffc350ecb1844880afd8fb75a7589b7bd04
 else
