@@ -2,6 +2,10 @@
 
 source lib.sh
 
+if [[uname -m | grep -q "aarch64"]];then
+    exit 0
+fi
+
 echo "Fix node"
 # armv6l
 wget https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-armv6l.tar.gz

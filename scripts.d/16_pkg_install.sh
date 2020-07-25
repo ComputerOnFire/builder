@@ -27,7 +27,7 @@ INSTALL_PACKAGES=(
     htop
     speedtest-cli # speedtest.net
     libffi-dev # for building docker-compose using pip
-    # python3-coral-enviro # Coral environmental board
+    # python3-coral-enviro # Coral environmental board, disabled for arm64 builds
     bc # for memory command
     libusb-dev # for usb.sh
     dnsutils
