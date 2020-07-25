@@ -15,7 +15,7 @@ steps:
   commands:
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-arm-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
   - python3 -m pip install requests
   - mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive # --arm64 or --armhf, need to implement in builder
 
@@ -36,7 +36,7 @@ steps:
   commands:
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-arm-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
   - python3 -m pip install requests
   - mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive
   - ./.travis/compress.sh
@@ -64,7 +64,7 @@ steps:
   commands:
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-arm-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
   - python3 -m pip install requests
   - mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive
 
