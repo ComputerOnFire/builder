@@ -13,12 +13,12 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - dmsetup remove_all
   - df -h
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup -y
   - python3 -m pip install requests
+  - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive' # --arm64 or --armhf, need to implement in builder
 
 ---
@@ -36,11 +36,12 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - dmsetup remove_all
+  - df -h
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup -y
   - python3 -m pip install requests
+  - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive'
   - ./.travis/compress.sh
   - ./.travis/upload.sh
@@ -65,12 +66,12 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - dmsetup remove_all
   - df -h
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup -y
   - python3 -m pip install requests
+  - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive'
 
 ---
@@ -88,11 +89,12 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - dmsetup remove_all
+  - df -h
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-arm-static -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup -y
   - python3 -m pip install requests
+  - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive'
   - ./.travis/compress.sh
   - ./.travis/upload.sh
