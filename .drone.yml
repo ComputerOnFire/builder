@@ -14,7 +14,6 @@ steps:
   privileged: true
   commands:
   - dmsetup remove_all
-  - echo "$GITHUB_KEY"
   - df -h
   - apt-get update
   - apt-get dist-upgrade -y
@@ -67,7 +66,6 @@ steps:
   privileged: true
   commands:
   - dmsetup remove_all
-  - echo "$GITHUB_KEY"
   - df -h
   - apt-get update
   - apt-get dist-upgrade -y
