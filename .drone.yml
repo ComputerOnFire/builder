@@ -13,6 +13,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - dmsetup remove_all
   - echo "$GITHUB_KEY"
   - df -h
   - apt-get update
@@ -36,6 +37,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - dmsetup remove_all
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static -y
@@ -64,6 +66,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - dmsetup remove_all
   - echo "$GITHUB_KEY"
   - df -h
   - apt-get update
@@ -87,6 +90,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - dmsetup remove_all
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-arm-static -y
