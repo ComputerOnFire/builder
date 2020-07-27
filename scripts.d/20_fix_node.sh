@@ -2,7 +2,7 @@
 
 source lib.sh
 
-if [[ uname -m | grep -q "aarch64" ]];then
+if uname -m | grep -q "aarch64" ; then
     exit 0
 fi
 
