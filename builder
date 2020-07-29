@@ -25,7 +25,7 @@ MINIMAL_SPACE_LEFT=111111
 source lib.sh
 
 missing_deps=()
-for prog in kpartx wget gpg parted aria2c jq curl qemu-user-static; do # qemu-arm-static
+for prog in kpartx wget gpg parted aria2c jq curl qemu-arm-static; do # qemu-arm-static
     if ! type $prog &>/dev/null ; then
         missing_deps+=( "$prog" )
     fi
