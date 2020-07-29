@@ -25,7 +25,7 @@ MINIMAL_SPACE_LEFT=111111
 source lib.sh
 
 missing_deps=()
-for prog in kpartx wget gpg parted aria2c jq curl; do # qemu-arm-static
+for prog in kpartx wget gpg parted aria2c jq curl qemu-user-static; do # qemu-arm-static
     if ! type $prog &>/dev/null ; then
         missing_deps+=( "$prog" )
     fi
@@ -100,12 +100,12 @@ function _resize_image {
     fi
 
     start_sector=$(fdisk -l "$RESIZE_IMAGE_PATH" | awk -F" "  '{ print $2 }' | sed '/^$/d' | sed -e '$!d')
-    df
-    LOOP_BASE=$(df | grep 'loop' | wc -l) #formerly loop0, loop1, loop2
+    losetup -a
+    LOOP_BASE=$(losetup -a | grep -c 'loop') #formerly loop0, loop1, loop2
     echo "LOOP BASE: $LOOP_BASE"
-    LOOP_ONE=$(( $LOOP_BASE + 1 ))
+    LOOP_ONE=$(( LOOP_BASE + 1 ))
     echo "LOOP ONE: $LOOP_ONE"
-    LOOP_TWO=$(( $LOOP_BASE + 2 ))
+    LOOP_TWO=$(( LOOP_BASE + 2 ))
     echo "LOOP TWO: $LOOP_TWO"
     truncate -s +$EXTRA_IMAGE_SIZE "$RESIZE_IMAGE_PATH"
     losetup "/dev/loop$LOOP_ONE" "$RESIZE_IMAGE_PATH"
@@ -163,7 +163,7 @@ function _close_image {
 function _prepare_chroot {
     _disable_ld_preload
 
-    #cp -a "$(type -p qemu-arm-static)" mnt/img_root/usr/bin/ || die "Could not copy qemu-arm-static"
+    cp -a "$(type -p qemu-arm-static)" mnt/img_root/usr/bin/ || die "Could not copy qemu-arm-static"
     _chroot date &>/dev/null || die "Could not chroot date"
 
     mount -t devpts devpts -o noexec,nosuid,gid=5,mode=620 mnt/img_root/dev/pts || die "Could not mount /dev/pts"
