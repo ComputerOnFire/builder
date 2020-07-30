@@ -17,6 +17,7 @@ steps:
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git rsync -y
+  - ln -s /usr/local/bin/node /usr/bin/node
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -48,11 +49,7 @@ steps:
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git rsync -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce-cli:armhf
+  - ln -s /usr/local/bin/node /usr/bin/node
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -89,11 +86,7 @@ steps:
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git rsync -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce-cli:arm64
+  - ln -s /usr/local/bin/node /usr/bin/node
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -126,11 +119,7 @@ steps:
   - apt-get update
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git rsync -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce-cli:arm64
+  - ln -s /usr/local/bin/node /usr/bin/node
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
