@@ -18,8 +18,8 @@ steps:
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf -y
   - python3 -m pip install requests
-  - losetup -D
   - dmsetup remove_all
+  - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
   when:
     event:
@@ -48,8 +48,8 @@ steps:
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf -y
   - python3 -m pip install requests
-  - losetup -D
   - dmsetup remove_all
+  - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
   - cd builder
   - pwd
@@ -86,8 +86,8 @@ steps:
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu -y
   - python3 -m pip install requests
-  - losetup -D
   - dmsetup remove_all
+  - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
   when:
     event:
@@ -118,8 +118,8 @@ steps:
   - apt-get dist-upgrade -y
   - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu -y
   - python3 -m pip install requests
-  - losetup -D
   - dmsetup remove_all
+  - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
   - cd builder
   - pwd
