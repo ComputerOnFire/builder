@@ -17,12 +17,17 @@ release_is_number() {
 
 make_name() {
     release=$(get_release)
+    if uname -m | grep "aarch64"; then
+      arch=arm64
+    else
+      arch=armhf
+    fi
 
     if [ -z "$release" ]; then
         die "No release tag found; quitting"
     fi
 
-    name=$prefix-$release
+    name=$prefix-$release-$arch
 } 
 
 checksum() {
