@@ -16,7 +16,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -46,7 +46,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -54,6 +54,7 @@ steps:
   - pwd
   - ls -al
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - git tag --points-at HEAD | tail -n1 2>/dev/null | sed -e 's/^release-//'
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
@@ -83,7 +84,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -114,7 +115,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
