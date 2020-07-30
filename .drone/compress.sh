@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .travis/utils.sh
+source .drone/utils.sh
 
 compress() {
     if [[ ! -e "$image_gz" ]] || [[ "$image_gz" -ot "$image" ]]; then

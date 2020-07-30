@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .travis/utils.sh
+source .drone/utils.sh
 
 build_type="branch"
 image_dir="experiment/"
