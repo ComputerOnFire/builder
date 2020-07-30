@@ -51,12 +51,12 @@ steps:
   - losetup -D
   - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .travis/id_deploy
-  - . .travis/environment.sh
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - . .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - ./.travis/compress.sh
-  - ./.travis/upload.sh
+  - ./.drone/compress.sh
+  - ./.drone/upload.sh
   when:
     event:
       include:
@@ -107,7 +107,7 @@ steps:
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
-    # echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .travis/id_deploy
+    # echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   privileged: true
   commands:
   - losetup -a
@@ -118,12 +118,12 @@ steps:
   - losetup -D
   - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .travis/id_deploy
-  - . .travis/environment.sh
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - . .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - ./.travis/compress.sh
-  - ./.travis/upload.sh
+  - ./.drone/compress.sh
+  - ./.drone/upload.sh
   when:
     event:
       include:
