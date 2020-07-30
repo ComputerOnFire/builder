@@ -199,10 +199,10 @@ function _modify_image {
     _prepare_chroot
     _disable_daemons
 
-    if run-parts --exit-on-error -v --regex '[a-zA-Z.-_]*' scripts.d |& grep -q "E: Failed to fetch"; then
+    if ! run-parts --exit-on-error -v --regex '[a-zA-Z.-_]*' scripts.d |& grep -q "E: Failed to fetch" ; then
         run-parts --exit-on-error -v --regex '[a-zA-Z.-_]*' scripts.d || die "Image modification scripts AND mirror restart failed"
     else
-        echo "Image modification scripts failed"
+        echo "Image modification scripts finished, check output."
     fi
 
     _enable_daemons
