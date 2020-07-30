@@ -16,7 +16,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git docker-ce -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -46,7 +46,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git docker-ce -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -84,7 +84,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git docker-ce -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -115,7 +115,7 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git docker-ce -y
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
