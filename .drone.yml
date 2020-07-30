@@ -109,7 +109,6 @@ steps:
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
-    # echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   privileged: true
   commands:
   - losetup -a
