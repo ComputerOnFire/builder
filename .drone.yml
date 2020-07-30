@@ -51,8 +51,6 @@ steps:
   #- dmsetup remove_all
   #- losetup -D
   # - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
-  - pwd
-  - ls -al
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - git tag --points-at HEAD | tail -n1 2>/dev/null | sed -e 's/^release-//'
   - .drone/environment.sh
@@ -120,8 +118,6 @@ steps:
  # - dmsetup remove_all
  # - losetup -D
   #- bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
-  - pwd
-  - ls -al
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
