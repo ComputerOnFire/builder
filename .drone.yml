@@ -51,6 +51,7 @@ steps:
   - losetup -D
   - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
+  - cd builder
   - pwd
   - ls
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
@@ -120,6 +121,7 @@ steps:
   - losetup -D
   - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
+  - cd builder
   - pwd
   - ls
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
