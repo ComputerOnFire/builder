@@ -21,7 +21,10 @@ steps:
  # - losetup -D
  # - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
-
+  when:
+    event:
+      exclude:
+        - tag
 ---
 kind: pipeline
 type: docker
@@ -76,6 +79,10 @@ steps:
  # - losetup -D
  # - dmsetup remove_all
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
+  when:
+    event:
+      exclude:
+        - tag
 
 ---
 kind: pipeline
