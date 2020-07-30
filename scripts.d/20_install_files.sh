@@ -323,4 +323,4 @@ ExecStart=/usr/bin/python3 /usr/local/bin/bluetooth-server.py &
 WantedBy=multi-user.target
 EOF
 
-ln -s /etc/systemd/system/autorun.service /etc/systemd/system/multi-user.target/autorun.service
+_op _chroot ln -s /etc/systemd/system/autorun.service /etc/systemd/system/multi-user.target/autorun.service
