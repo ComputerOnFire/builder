@@ -46,14 +46,14 @@ steps:
   - git fetch --tags
   - losetup -a
   - apt-get update
-  # - apt-get dist-upgrade -y
-  # - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git docker-ce -y
-  #- python3 -m pip install requests
-  #- dmsetup remove_all
-  #- losetup -D
-  # - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
+  - apt-get dist-upgrade -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git docker-ce -y
+  - python3 -m pip install requests
+  - dmsetup remove_all
+  - losetup -D
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - git tag --points-at HEAD | tail -n1 2>/dev/null | sed -e 's/^release-//'
+ # - git tag --points-at HEAD | tail -n1 2>/dev/null | sed -e 's/^release-//'
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
@@ -114,14 +114,14 @@ steps:
   - git fetch --tags
   - losetup -a
   - apt-get update
-  #- apt-get dist-upgrade -y
-  #- apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git docker-ce -y
- # - python3 -m pip install requests
- # - dmsetup remove_all
- # - losetup -D
-  #- bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
+  - apt-get dist-upgrade -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git docker-ce -y
+  - python3 -m pip install requests
+  - dmsetup remove_all
+  - losetup -D
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - git tag --points-at HEAD | tail -n1 2>/dev/null | sed -e 's/^release-//'
+ # - git tag --points-at HEAD | tail -n1 2>/dev/null | sed -e 's/^release-//'
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
