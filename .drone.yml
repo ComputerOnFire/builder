@@ -16,7 +16,10 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git docker-ce -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git apt-transport-https ca-certificates curl software-properties-common gnupg-agent -y
+  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+  - apt-key fingerprint 0EBFCD88
+  - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -47,7 +50,10 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git docker-ce -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs git apt-transport-https ca-certificates curl software-properties-common gnupg-agent -y
+  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+  - apt-key fingerprint 0EBFCD88
+  - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -83,7 +89,10 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git docker-ce -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git apt-transport-https ca-certificates curl software-properties-common gnupg-agent -y
+  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+  - apt-key fingerprint 0EBFCD88
+  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
@@ -115,7 +124,10 @@ steps:
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git docker-ce -y
+  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs git apt-transport-https ca-certificates curl software-properties-common gnupg-agent -y
+  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+  - apt-key fingerprint 0EBFCD88
+  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
   - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
