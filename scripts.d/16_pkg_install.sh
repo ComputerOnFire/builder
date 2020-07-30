@@ -11,7 +11,7 @@ INSTALL_PACKAGES=(
     elinks links lynx # text mode web browser
     hostapd dnsmasq # rpi access point
     dos2unix # for converting dos characters to unix in autorunonce
-    nodejs # version 8.5.0-1nodesource1
+    nodejs npm # version 8.5.0-1nodesource1
     autossh
     python3-pip python3-dbus
     bluez minicom bluez-tools libbluetooth-dev # bluetooth hotspot
