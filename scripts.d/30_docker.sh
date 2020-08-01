@@ -2,6 +2,10 @@
 
 source lib.sh
 
+_pip3_install docker-compose --no-cache-dir
+
+exit 0
+
 IMAGES=(
     portainer/portainer:linux-arm
     #pihole/pihole:4.3.1-4_armhf 
