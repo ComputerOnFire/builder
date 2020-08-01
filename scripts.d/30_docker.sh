@@ -1,9 +1,5 @@
 #!/bin/bash
 
-_pip3_install docker-compose --no-cache-dir
-
-exit 0
-
 source lib.sh
 
 IMAGES=(
