@@ -7,7 +7,7 @@ platform:
 
 steps:
 - name: test
-  image: arm32v7/golang
+  image: balenalib/armv7hf-golang
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -39,7 +39,7 @@ platform:
   arch: arm
 steps:
 - name: build
-  image: arm32v7/golang
+  image: balenalib/armv7hf-golang
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -83,7 +83,7 @@ platform:
 
 steps:
 - name: test
-  image: arm64v8/golang
+  image: balenalib/aarch64-golang
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -116,7 +116,7 @@ platform:
   arch: arm64
 steps:
 - name: build
-  image: arm64v8/golang
+  image: balenalib/aarch64-golang
   environment:
     GITHUB_KEY:
       from_secret: api_key
