@@ -8,6 +8,9 @@ platform:
 steps:
 - name: test
   image: balenalib/armv7hf-golang
+  volumes:
+  - name: /var/run/docker.sock
+    path: /var/run/docker.sock
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -40,6 +43,9 @@ platform:
 steps:
 - name: build
   image: balenalib/armv7hf-golang
+  volumes:
+  - name: /var/run/docker.sock
+    path: /var/run/docker.sock
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -84,6 +90,9 @@ platform:
 steps:
 - name: test
   image: balenalib/aarch64-golang
+  volumes:
+  - name: /var/run/docker.sock
+    path: /var/run/docker.sock
   environment:
     GITHUB_KEY:
       from_secret: api_key
