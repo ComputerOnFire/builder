@@ -16,6 +16,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - df -h
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
@@ -61,6 +62,7 @@ steps:
   privileged: true
   commands:
   - git fetch --tags
+  - df -h
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
@@ -109,6 +111,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - df -h
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
@@ -154,6 +157,7 @@ steps:
   privileged: true
   commands:
   - git fetch --tags
+  - df -h
   - losetup -a
   - apt-get update
   - apt-get dist-upgrade -y
