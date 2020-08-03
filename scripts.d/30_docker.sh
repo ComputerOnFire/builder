@@ -2,9 +2,11 @@
 
 source lib.sh
 
-_pip3_install docker-compose --no-cache-dir
+ln -sr /var/run/docker.sock mnt/img_root/var/run/docker.sock
+_op _chroot docker version
+#_pip3_install docker-compose --no-cache-dir
 
-exit 0
+#exit 0
 
 IMAGES=(
     portainer/portainer:linux-arm
@@ -56,6 +58,7 @@ _op _chroot docker images
 
 #_op _chroot service docker stop
 #unlink docker
+unlink mnt/img_root/var/run/docker.sock
 #mv docker.temp docker
 #service docker start
 
