@@ -9,10 +9,10 @@ steps:
 - name: build
   image: balenalib/armv7hf-golang
   volumes:
-  - name: dockersock
-    path: /drone/src/mnt/img_root/var/run/docker.sock
   - name: builder
     path: /drone/src
+  - name: dockersock
+    path: /var/run/docker.sock
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -36,10 +36,10 @@ steps:
 - name: deploy
   image: plugins/s3
   volumes:
-  - name: dockersock
-    path: /drone/src/mnt/img_root/var/run/docker.sock
   - name: builder
     path: /drone/src
+  - name: dockersock
+    path: /var/run/docker.sock
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
@@ -89,10 +89,10 @@ steps:
 - name: build
   image: balenalib/aarch64-golang
   volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
   - name: builder
     path: /drone/src
+  - name: dockersock
+    path: /var/run/docker.sock
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -116,10 +116,10 @@ steps:
 - name: deploy
   image: plugins/s3
   volumes:
-  - name: dockersock
-    path: /drone/src/mnt/img_root/var/run/docker.sock
   - name: builder
     path: /drone/src
+  - name: dockersock
+    path: /var/run/docker.sock
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
