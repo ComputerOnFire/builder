@@ -31,7 +31,7 @@ steps:
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
-- name: deploy
+- name: deploy-experiment
   image: plugins/s3
   volumes:
   - name: dockersock
@@ -62,6 +62,43 @@ steps:
   - .drone/compress.sh
   - .drone/upload.sh
   when:
+    event:
+      include:
+        - tag
+        
+- name: deploy-master
+  image: plugins/s3
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: /drone/src/images
+    target: /target/location
+    strip_prefix: /drone/src/images/
+    exclude:
+      - /drone/src/images/*.torrent
+      - /drone/src/images/*.img
+  commands:
+  - pwd
+  - git fetch --tags
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - .drone/environment.sh
+  - echo "$experiment"
+  - echo "$image_path"
+  - .drone/compress.sh
+  - .drone/upload.sh
+  when:
+    branch:
+    - master
     event:
       include:
         - tag
@@ -107,7 +144,7 @@ steps:
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
-- name: deploy
+- name: deploy-experiment
   image: plugins/s3
   volumes:
   - name: dockersock
@@ -138,6 +175,42 @@ steps:
   - .drone/compress.sh
   - .drone/upload.sh
   when:
+    event:
+      include:
+        - tag
+- name: deploy-master
+  image: plugins/s3
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: /drone/src/images
+    target: /target/location
+    strip_prefix: /drone/src/images/
+    exclude:
+      - /drone/src/images/*.torrent
+      - /drone/src/images/*.img
+  commands:
+  - pwd
+  - git fetch --tags
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - .drone/environment.sh
+  - echo "$experiment"
+  - echo "$image_path"
+  - .drone/compress.sh
+  - .drone/upload.sh
+  when:
+    branch:
+    - master
     event:
       include:
         - tag
