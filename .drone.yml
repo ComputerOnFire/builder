@@ -1,16 +1,18 @@
 kind: pipeline
 type: docker
-name: arm-test
+name: arm-build
 
 platform:
   arch: arm
 
 steps:
-- name: test
+- name: build
   image: balenalib/armv7hf-golang
   volumes:
   - name: dockersock
-    path: /var/run/docker.sock
+    path: /drone/src/mnt/img_root/var/run/docker.sock
+  - name: builder
+    path: /drone/src
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -30,52 +32,33 @@ steps:
   - dmsetup remove_all
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
-  when:
-    event:
-      exclude:
-        - tag
 
-volumes:
-- name: dockersock
-  host:
-    path: /var/run/docker.sock
-
----
-kind: pipeline
-type: docker
-name: arm-build
-
-platform:
-  arch: arm
-steps:
-- name: build
-  image: balenalib/armv7hf-golang
+- name: deploy
+  image: plugins/s3
   volumes:
   - name: dockersock
-    path: /var/run/docker.sock
-  environment:
-    GITHUB_KEY:
-      from_secret: api_key
+    path: /drone/src/mnt/img_root/var/run/docker.sock
+  - name: builder
+    path: /drone/src
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
   privileged: true
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: /drone/src/images
+    target: /target/location
+    strip_prefix: /drone/src/images/
+    exclude:
+      - /drone/src/images/*.torrent
+      - /drone/src/images/*.img
   commands:
-  - git fetch --tags
-  - df -h
-  - losetup -a
-  - apt-get update
-  - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs npm git rsync apt-transport-https ca-certificates gnupg-agent software-properties-common ssh -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce -y
-  - python3 -m pip install requests
-  - dmsetup remove_all
-  - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf'
+  - pwd
+  - git version
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
@@ -91,21 +74,25 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
+- name: builder
+  temp: {}
 
 ---
 kind: pipeline
 type: docker
-name: arm64-test
+name: arm64
 
 platform:
   arch: arm64
 
 steps:
-- name: test
+- name: build
   image: balenalib/aarch64-golang
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
+  - name: builder
+    path: /drone/src
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -125,52 +112,33 @@ steps:
   - dmsetup remove_all
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
-  when:
-    event:
-      exclude:
-        - tag
 
-volumes:
-- name: dockersock
-  host:
-    path: /var/run/docker.sock
-  
----
-kind: pipeline
-type: docker
-name: arm64-build
-
-platform:
-  arch: arm64
-steps:
-- name: build
-  image: balenalib/aarch64-golang
+- name: deploy
+  image: plugins/s3
   volumes:
   - name: dockersock
-    path: /var/run/docker.sock
-  environment:
-    GITHUB_KEY:
-      from_secret: api_key
+    path: /drone/src/mnt/img_root/var/run/docker.sock
+  - name: builder
+    path: /drone/src
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
   privileged: true
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: /drone/src/images
+    target: /target/location
+    strip_prefix: /drone/src/images/
+    exclude:
+      - /drone/src/images/*.torrent
+      - /drone/src/images/*.img
   commands:
-  - git fetch --tags
-  - df -h
-  - losetup -a
-  - apt-get update
-  - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs npm git rsync apt-transport-https ca-certificates gnupg-agent software-properties-common ssh -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce -y
-  - python3 -m pip install requests
-  - dmsetup remove_all
-  - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
+  - pwd
+  - git version
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
@@ -186,6 +154,8 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
+- name: builder
+  temp: {}
 
 #AWS STUFF HERE
 # steps:
@@ -211,3 +181,12 @@ name: ssh_secret
 data: RGw+ppmyTOmCvMZjM1Pl7POEm5LEPvdX00IN7iyQcQ7PTn+FujtPlZwKTN/bTEKUev1T2l58HHwX5bS2JrxikabtcKWXBzSesOtDzIFOCeI9gdAS9KXHV0UxhJFG46S4LyGvXYIIdMInQ3vnjZ3XCOvPhi2gG9pgoXrPZJrmZiOmmzq74KbqGUDaR57bb2uk++IZnSAWqfSKjGrJoeQqWOVQX3Tn9YcKuUR4shAt/wNqgHxH4norF6VKZ+X9cB9nlrCgEv+uhyY8wN9T/U/n4Zrqvyr52+6cqNEG/wGxUcyzv4Vcqkn2cKUicHP04h+vkcRo2jYJkEM9Xs890lzQSyzfiO3hPIgyACK6ktQ8qMwa85T47T7+wpICMMmsBkFjv/yk6kqR9SWl1eDb5GQX2Cz52rTK123DBj6iFk6WukuDfBjM5QbyUWQLmLBkSMIb8khg9WT/HyQuAZLMK++oC2S+DC9h8EmKNJ2fM5t5nSA6ExNP3kY0pW+AI/YSS2YHHVemHGt64tCIWSWubgrBeYaQngeBVxy0Y8L0ql5bsUyYCJZxeC9lzNRUfkHsS4BjwBLcqGBhc2bksXKlMX2z7to4U6fHNR7RkVXUb2MWW4OPImptQcj+Y3N31QfO0AjpdJDn2lPeKWtB4kZKD5LDKCj6e8l7SggVPRtCg4WIqLPIPqZ+En9Tv9e0+qGnhMPxYzklutKMdWFPdByq4g+iQrXjrXCmJEOxTUR4G11URL2MJ9PCEc2dzTzvRl21aE+56WHlVn3fJgryjg4wLe9j5HA5se2E8awr/pGgtjZkq+VsTUuB4lQAoJ7QJFlB/ztL6dIi3lDO+URaM6PhRdV70E1FeX6JJP7gDwSnaYJ2i1SHmAPzbUxzYt6NV70xooJdz06bqpq1Kq2KFZX3tkDdUxeECufCgCywCk8SlzvN/cg=
 #data: 6QitRTmvtYvUjh0aBwdrkxF8m1qnf+X1vTMOq1pX4tbpW3gYErfO4nDQ7HVuH4AwtallRGh5uxQdmyRjQ3r4gia8AzuM8ZTQmakDGOV1b5DgZSZwag2c4ybvV7ZDRhg1o3gFujKffBqS5vLJONAUflwz9aVonav9S0KPZZjasXUNf1gkXxP6WpKgH505ZgI/ArxKvHfjlbFa5C1Ml5N2p/VOT35MwTPOPYi+vfIzDcKUDCKkNPciwO0BFlpjTMq1AwwD/6QuTwy/yyXOPYLY1vcGTPKVCznLxMIQohSwpVIZbzseuUiVRY36xRSd2EDkIev68V0ElI1n6UkKGM/wFKZ1zRSnOcW+4iAWmsvwoyHsS+7xJh5XFxZUx5gGLVTG4XCugiZPQMTdMPeRfp9lW1Bcy7pWHO/OV/YUOCyS3VvGk0k9syoRY5r9I3R1dbuvi0AGc7Iwh2G6y9Q7PBoHCnSYsFMJys6BXznmy1gHSt43YfYtROeXarCpCI4xv4g0ENHv2QprowdYb7YEonVmxhcFMU1Cir7Z7CpCyOmZSnT7b0sR7InHWnxDkwQEavLMT6Z2+gW4u791CvEB9dBkabSdb876n739mCuTekz1UE7td1zXSeAeHk/YGdUXUFOvxqukl9/8meVXkllf8HkjRl9BvHrIESWB7rFYTBFiaNbLe4fuFzHAel0LTDx4gyqDLoO+TGpeULiyFi5r0Nlx+3otjnoOJ0sIMfWM6NcaRIxBLZuEy2sQAZhdBVWEt8oM3Pkejc0Xad5ROrx0d3x7k5GFU4BryYaaUWwms443YN4Lp4bWPMiUsr3iFaiSrkz7G1Y5TJl1LPKgXmu+YSYfqzeg8SNKs3FkWS158Q3kZvCPXKhlIQsGLs3c3MrDZolycaNvZ5xS+oLrjaxmYE2O0+W195GTtFkusfGJQlnSnVE=
 #media server
+---
+kind: secret
+name: aws_id
+data: Q1h3TDIntysOLZ1vlHxohieWAp5lzy0eI0EXNDQsBye+larjAWUwY8pW6b2P+QwA
+#encrypt these two aws keys again for mit media server, keys are server and repository based (no cloud)
+---
+kind: secret
+name: aws_secret
+data: CpJxI8PEbwbMurzWicajTYZvQ2drtT/oO6U01QsOoyceIfvo2x0XojcT0K5i7KUUxa1WZcnmjFR4FwdRVyOZ2AVdQ5M=
