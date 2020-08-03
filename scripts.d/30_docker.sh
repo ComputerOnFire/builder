@@ -2,6 +2,10 @@
 
 source lib.sh
 
+_pip3_install docker-compose --no-cache-dir
+
+exit 0
+
 IMAGES=(
     portainer/portainer:linux-arm
     #pihole/pihole:4.3.1-4_armhf 
@@ -28,6 +32,7 @@ for image in "${IMAGES[@]}" ; do
 done
 
 _op _chroot mkdir -p ~/.docker
+_op _chroot touch ~/.docker/config.json
 _op _chroot echo '{"experimental": "enabled"}' > ~/.docker/config.json
 
 #mkdir -p "$OLD/mnt/img_root/root/.docker"
@@ -37,7 +42,7 @@ for multi in "${MULTIS[@]}" ; do
     _op _chroot docker manifest inspect "$multi"
     name=$(echo "$multi" | cut -d ":" -f 1)
     tag=$(echo "$multi" | cut -d ":" -f 2)
-    hash=$(docker manifest inspect "$multi" | jq '.manifests' | jq -c 'map(select(.platform.architecture | contains("arm")))' | jq '.[0]' | jq '.digest' | sed -e 's/^"//' -e 's/"$//')
+    hash=$(_op _chroot docker manifest inspect "$multi" | jq '.manifests' | jq -c 'map(select(.platform.architecture | contains("arm")))' | jq '.[0]' | jq '.digest' | sed -e 's/^"//' -e 's/"$//')
     _op _chroot docker pull "$name@$hash"
     _op _chroot docker tag "$name@$hash" "$name:$tag" 
 done
