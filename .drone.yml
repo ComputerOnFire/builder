@@ -9,8 +9,6 @@ steps:
 - name: build
   image: balenalib/armv7hf-golang
   volumes:
-  - name: builder
-    path: /drone/src
   - name: dockersock
     path: /var/run/docker.sock
   environment:
@@ -36,8 +34,6 @@ steps:
 - name: deploy
   image: plugins/s3
   volumes:
-  - name: builder
-    path: /drone/src
   - name: dockersock
     path: /var/run/docker.sock
   environment:
@@ -89,8 +85,6 @@ steps:
 - name: build
   image: balenalib/aarch64-golang
   volumes:
-  - name: builder
-    path: /drone/src
   - name: dockersock
     path: /var/run/docker.sock
   environment:
@@ -116,8 +110,6 @@ steps:
 - name: deploy
   image: plugins/s3
   volumes:
-  - name: builder
-    path: /drone/src
   - name: dockersock
     path: /var/run/docker.sock
   environment:
@@ -154,8 +146,6 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
-- name: builder
-  temp: {}
 
 #AWS STUFF HERE
 # steps:
