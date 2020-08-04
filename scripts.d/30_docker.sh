@@ -10,7 +10,7 @@ _op _chroot docker version
 
 IMAGES=(
     portainer/portainer:linux-arm
-    #pihole/pihole:4.3.1-4_armhf 
+    #pihole/pihole:4.3.1-4_armhf
     #firehol/netdata:armv7hf
 )
 
@@ -35,7 +35,7 @@ done
 
 _op _chroot mkdir -p ~/.docker
 _op _chroot touch ~/.docker/config.json
-_op _chroot echo '{"experimental": "enabled"}' > ~/.docker/config.json
+_op _chroot echo '{"experimental": "enabled"}\n' >> ~/.docker/config.json
 
 #mkdir -p "$OLD/mnt/img_root/root/.docker"
 #cp ~/.docker/config.json "$OLD/mnt/img_root/root/.docker/."
