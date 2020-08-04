@@ -33,9 +33,9 @@ for image in "${IMAGES[@]}" ; do
     _op _chroot docker pull "$image"
 done
 
-_op _chroot mkdir -p ~/.docker
-_op _chroot touch ~/.docker/config.json
-_op _chroot echo '{"experimental": "enabled"}\n' >> ~/.docker/config.json
+mkdir -p mnt/img_root/root/.docker
+touch mnt/img_root/root/.docker/config.json
+echo '{"experimental": "enabled"}' > mnt/img_root/root.docker/config.json
 
 #mkdir -p "$OLD/mnt/img_root/root/.docker"
 #cp ~/.docker/config.json "$OLD/mnt/img_root/root/.docker/."
