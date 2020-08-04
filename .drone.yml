@@ -11,11 +11,14 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
+  - name: bin
+    path: /bin #share installed binaries between steps
   environment:
     GITHUB_KEY:
       from_secret: api_key
   privileged: true
   commands:
+  - git fetch --tags
   - df -h
   - losetup -a
   - apt-get update
@@ -32,13 +35,40 @@ steps:
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
 - name: deploy-experiment
+  image: balenalib/armv7hf-golang
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  - name: bin
+    path: /bin
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
+  commands:
+  - pwd
+  #- git fetch --tags
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - .drone/environment.sh
+  - echo "$experiment"
+  - echo "$image_path"
+  - .drone/compress.sh
+  - .drone/upload.sh
+  when:
+    branch:
+      exclude:
+        - master
+    event:
+      include:
+        - tag
+
+- name: s3-experiment
   image: plugins/s3
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
+  - name: bin
+    path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -54,9 +84,28 @@ steps:
       - /drone/src/images/*.img
       - /drone/src/images/*.zip
       - /drone/src/images/*.aria2
+  when:
+    branch:
+      exclude:
+        - master
+    event:
+      include:
+        - tag
+
+- name: deploy-master
+  image: balenalib/armv7hf-golang
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  - name: bin
+    path: /bin
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
   commands:
   - pwd
-  - git fetch --tags
+  #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
@@ -64,18 +113,19 @@ steps:
   - .drone/compress.sh
   - .drone/upload.sh
   when:
+    branch:
+    - master
     event:
       include:
         - tag
 
-- name: deploy-master
+- name: s3-master
   image: plugins/s3
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
+  - name: bin
+    path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -91,15 +141,6 @@ steps:
       - /drone/src/images/*.img
       - /drone/src/images/*.zip
       - /drone/src/images/*.aria2
-  commands:
-  - pwd
-  - git fetch --tags
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - .drone/environment.sh
-  - echo "$experiment"
-  - echo "$image_path"
-  - .drone/compress.sh
-  - .drone/upload.sh
   when:
     branch:
     - master
@@ -111,6 +152,8 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
+- name: bin
+  temp: {}
 
 ---
 kind: pipeline
@@ -126,11 +169,14 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
+  - name: bin
+    path: /bin
   environment:
     GITHUB_KEY:
       from_secret: api_key
   privileged: true
   commands:
+  - git fetch --tags
   - df -h
   - losetup -a
   - apt-get update
@@ -147,13 +193,38 @@ steps:
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
 - name: deploy-experiment
+  image: balenalib/aarch64-golang
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  - name: bin
+    path: /bin
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
+  commands:
+  - pwd
+  #- git fetch --tags
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - .drone/environment.sh
+  - echo "$experiment"
+  - echo "$image_path"
+  - .drone/compress.sh
+  - .drone/upload.sh
+  when:
+    branch:
+      exclude:
+        - master
+    event:
+      include:
+        - tag
+
+- name: s3-experiment
   image: plugins/s3
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
   privileged: true
   settings:
     bucket: treehouses
@@ -169,9 +240,25 @@ steps:
       - /drone/src/images/*.img
       - /drone/src/images/*.zip
       - /drone/src/images/*.aria2
+  when:
+    event:
+      include:
+        - tag
+
+- name: deploy-master
+  image: balenalib/aarch64-golang
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  - name: bin
+    path: /bin
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
   commands:
   - pwd
-  - git fetch --tags
+  #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
@@ -179,17 +266,19 @@ steps:
   - .drone/compress.sh
   - .drone/upload.sh
   when:
+    branch:
+    - master
     event:
       include:
         - tag
-- name: deploy-master
+
+- name: s3-master
   image: plugins/s3
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
+  - name: bin
+    path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -205,15 +294,6 @@ steps:
       - /drone/src/images/*.img
       - /drone/src/images/*.zip
       - /drone/src/images/*.aria2
-  commands:
-  - pwd
-  - git fetch --tags
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - .drone/environment.sh
-  - echo "$experiment"
-  - echo "$image_path"
-  - .drone/compress.sh
-  - .drone/upload.sh
   when:
     branch:
     - master
@@ -225,6 +305,8 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
+- name: bin
+  temp: {}
 
 #AWS STUFF HERE
 # steps:

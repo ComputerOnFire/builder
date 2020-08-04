@@ -4,9 +4,16 @@ source lib.sh
 
 _pip3_install docker-compose --no-cache-dir
 
-exit 0
+#exit 0
 
-ln -sr /var/run/docker.sock mnt/img_root/var/run/docker.sock
+arch="arm"
+
+if uname -m | grep -q "aarch64" ; then
+    arch="aarch64"
+    exit 0
+fi
+
+#ln -sr /var/run/docker.sock mnt/img_root/var/run/docker.sock
 _op _chroot docker version
 
 IMAGES=(
@@ -37,6 +44,7 @@ done
 mkdir -p mnt/img_root/root/.docker
 #touch mnt/img_root/root/.docker/config.json
 echo '{"experimental": "enabled"}' > mnt/img_root/root/.docker/config.json
+echo '{"experimental": "enabled"}' > /root/.docker/config.json
 
 #mkdir -p "$OLD/mnt/img_root/root/.docker"
 #cp ~/.docker/config.json "$OLD/mnt/img_root/root/.docker/."
@@ -45,7 +53,7 @@ for multi in "${MULTIS[@]}" ; do
     _op _chroot docker manifest inspect "$multi"
     name=$(echo "$multi" | cut -d ":" -f 1)
     tag=$(echo "$multi" | cut -d ":" -f 2)
-    hash=$(_op _chroot docker manifest inspect "$multi" | jq '.manifests' | jq -c 'map(select(.platform.architecture | contains("arm")))' | jq '.[0]' | jq '.digest' | sed -e 's/^"//' -e 's/"$//')
+    hash=$(_op _chroot docker manifest inspect "$multi" | jq '.manifests' | jq -c 'map(select(.platform.architecture | contains('$arch')))' | jq '.[0]' | jq '.digest' | sed -e 's/^"//' -e 's/"$//')
     _op _chroot docker pull "$name@$hash"
     _op _chroot docker tag "$name@$hash" "$name:$tag" 
 done
@@ -59,7 +67,7 @@ _op _chroot docker images
 
 #_op _chroot service docker stop
 #unlink docker
-unlink mnt/img_root/var/run/docker.sock
+#unlink mnt/img_root/var/run/docker.sock
 #mv docker.temp docker
 #service docker start
 
