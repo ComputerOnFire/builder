@@ -47,7 +47,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: /drone/src/images
-    target: /target/location
+    target: /experiment/
     strip_prefix: /drone/src/images/
     exclude:
       - /drone/src/images/*.torrent
@@ -65,7 +65,7 @@ steps:
     event:
       include:
         - tag
-        
+
 - name: deploy-master
   image: plugins/s3
   volumes:
@@ -82,7 +82,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: /drone/src/images
-    target: /target/location
+    target: /
     strip_prefix: /drone/src/images/
     exclude:
       - /drone/src/images/*.torrent
@@ -160,7 +160,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: /drone/src/images
-    target: /target/location
+    target: /experiment/
     strip_prefix: /drone/src/images/
     exclude:
       - /drone/src/images/*.torrent
@@ -194,7 +194,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: /drone/src/images
-    target: /target/location
+    target: /
     strip_prefix: /drone/src/images/
     exclude:
       - /drone/src/images/*.torrent
