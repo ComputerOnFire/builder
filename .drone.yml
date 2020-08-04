@@ -111,8 +111,6 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
-- name: builder
-  temp: {}
 
 ---
 kind: pipeline
