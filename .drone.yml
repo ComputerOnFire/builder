@@ -52,6 +52,8 @@ steps:
     exclude:
       - /drone/src/images/*.torrent
       - /drone/src/images/*.img
+      - /drone/src/images/*.zip
+      - /drone/src/images/*.aria2
   commands:
   - pwd
   - git fetch --tags
@@ -87,6 +89,8 @@ steps:
     exclude:
       - /drone/src/images/*.torrent
       - /drone/src/images/*.img
+      - /drone/src/images/*.zip
+      - /drone/src/images/*.aria2
   commands:
   - pwd
   - git fetch --tags
@@ -165,6 +169,8 @@ steps:
     exclude:
       - /drone/src/images/*.torrent
       - /drone/src/images/*.img
+      - /drone/src/images/*.zip
+      - /drone/src/images/*.aria2
   commands:
   - pwd
   - git fetch --tags
@@ -199,6 +205,8 @@ steps:
     exclude:
       - /drone/src/images/*.torrent
       - /drone/src/images/*.img
+      - /drone/src/images/*.zip
+      - /drone/src/images/*.aria2
   commands:
   - pwd
   - git fetch --tags
