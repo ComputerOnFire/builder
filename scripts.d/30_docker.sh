@@ -2,7 +2,7 @@
 
 source lib.sh
 
-ln -sr /var/run/docker.sock /mnt/img_root/var/run/docker.sock
+ln -sr /var/run/docker.sock mnt/img_root/var/run/docker.sock
 _op _chroot docker version
 #_pip3_install docker-compose --no-cache-dir
 
