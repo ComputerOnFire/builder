@@ -11,8 +11,8 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin #share installed binaries between steps
+  #- name: bin
+    #path: /bin #share installed binaries between steps
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -39,14 +39,15 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin
+  #- name: bin
+    #path: /bin
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
   privileged: true
   commands:
   - pwd
+  - apt-get install rsync git -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
@@ -67,8 +68,8 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin
+  #- name: bin
+   # path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -97,14 +98,15 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin
+ # - name: bin
+   # path: /bin
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
   privileged: true
   commands:
   - pwd
+  - apt-get install rsync git -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
@@ -205,6 +207,7 @@ steps:
   privileged: true
   commands:
   - pwd
+  - apt-get install rsync git -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
@@ -258,6 +261,7 @@ steps:
   privileged: true
   commands:
   - pwd
+  - apt-get install rsync git -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
