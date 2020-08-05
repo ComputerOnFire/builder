@@ -11,8 +11,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  #- name: bin
-    #path: /bin #share installed binaries between steps
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -39,8 +37,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  #- name: bin
-    #path: /bin
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
@@ -69,8 +65,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  #- name: bin
-   # path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -78,7 +72,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /drone/src/images
+    source: **/images/*
     target: /experiment/
     strip_prefix: /drone/src/images/
     exclude:
@@ -99,8 +93,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
- # - name: bin
-   # path: /bin
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
@@ -128,8 +120,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -137,7 +127,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /drone/src/images
+    source: **/images/*
     target: /
     strip_prefix: /drone/src/images/
     exclude:
@@ -173,8 +163,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin
   environment:
     GITHUB_KEY:
       from_secret: api_key
@@ -201,8 +189,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
- # - name: bin
-   # path: /bin
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
@@ -238,7 +224,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /drone/src/images
+    source: **/images/*
     target: /experiment/
     strip_prefix: /drone/src/images/
     exclude:
@@ -256,8 +242,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
- # - name: bin
-    #path: /bin
   environment:
     ssh_deploy_key:
       from_secret: ssh_secret
@@ -285,8 +269,6 @@ steps:
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
-  - name: bin
-    path: /bin
   privileged: true
   settings:
     bucket: treehouses
@@ -294,7 +276,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /drone/src/images
+    source: **/images/*
     target: /
     strip_prefix: /drone/src/images/
     exclude:
