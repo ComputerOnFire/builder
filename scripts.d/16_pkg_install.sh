@@ -48,9 +48,10 @@ ARMHF_PACKAGES=( #packages which do not work on arm64
 
 if [[ ${INSTALL_PACKAGES:-} ]] ; then
     echo "Installing ${INSTALL_PACKAGES[*]}"
-    if _apt install "${INSTALL_PACKAGES[@]}" | grep -q 'Unable to connect to '; then
-        _apt install "${INSTALL_PACKAGES[@]}" || die "Could not install ${INSTALL_PACKAGES[*]}"
-    fi
+    _apt install "${INSTALL_PACKAGES[@]}" || die "Could not install ${INSTALL_PACKAGES[*]}"
+    #if _apt install "${INSTALL_PACKAGES[@]}" | grep -q 'Unable to connect to '; then
+        #_apt install "${INSTALL_PACKAGES[@]}" || die "Could not install ${INSTALL_PACKAGES[*]}"
+    #fi
 elif ! uname -m | grep -q "aarch64" && [[ ${ARMHF_PACKAGES:-} ]] ; then
     _apt install "${ARMHF_PACKAGES[@]}" || die "Could not install ${ARMHF_PACKAGES[*]}"
 fi
