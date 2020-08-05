@@ -62,18 +62,14 @@ steps:
 
 - name: s3-experiment
   image: plugins/s3
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  privileged: true
   settings:
     bucket: treehouses
     access_key:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: build #/**/*/images/*
-    target: experiment #strip_prefix: build
+    source: /**/build/* # build/*
+    target: / #strip_prefix: build/
   when:
     branch:
       exclude:
@@ -111,18 +107,14 @@ steps:
 
 - name: s3-master
   image: plugins/s3
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  privileged: true
   settings:
     bucket: treehouses
     access_key:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: build # images/*
-    target: / #strip_prefix: images/
+    source: /**/build/* # build/*
+    target: / #strip_prefix: build/
   when:
     branch:
     - master
@@ -200,19 +192,18 @@ steps:
 
 - name: s3-experiment
   image: plugins/s3
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  privileged: true
   settings:
     bucket: treehouses
     access_key:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: build #/**/*/images/*
-    target: experiment #strip_prefix: build
+    source: /**/build/* # build/*
+    target: / #strip_prefix: build/
   when:
+    branch:
+      exclude:
+        - master
     event:
       include:
         - tag
@@ -246,18 +237,14 @@ steps:
 
 - name: s3-master
   image: plugins/s3
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  privileged: true
   settings:
     bucket: treehouses
     access_key:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: build #/**/*/images/*
-    target: / #strip_prefix: build
+    source: /**/build/* # build/*
+    target: / #strip_prefix: build/
   when:
     branch:
     - master
