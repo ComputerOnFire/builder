@@ -72,7 +72,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/ #/**/*/images
+    source: /**/*/images/* #/**/*/images
     target: /experiment/
     strip_prefix: /drone/src/images/
     exclude:
@@ -127,7 +127,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/ #/**/*/images
+    source: /**/*/images/* #/**/*/images
     target: /
     strip_prefix: /drone/src/images/
     exclude:
@@ -224,7 +224,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/ #/**/*/images
+    source: /**/*/images/* #/**/*/images
     target: /experiment/
     strip_prefix: /drone/src/images/
     exclude:
@@ -276,7 +276,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/ #/**/*/images
+    source: /**/*/images/* #/**/*/images
     target: /
     strip_prefix: /drone/src/images/
     exclude:
