@@ -68,8 +68,9 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
+    source: build/* # 
+    target: / 
+    strip_prefix: build/
   when:
     branch:
       exclude:
@@ -113,8 +114,9 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
+    source: build/*
+    target: / 
+    strip_prefix: build/
   when:
     branch:
     - master
@@ -198,8 +200,9 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
+    source: build/*
+    target: / 
+    strip_prefix: build/
   when:
     branch:
       exclude:
@@ -243,8 +246,9 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
+    source: build/*
+    target: / 
+    strip_prefix: build/
   when:
     branch:
     - master
@@ -257,7 +261,7 @@ volumes:
   host:
     path: /var/run/docker.sock
 
-#AWS STUFF HERE
+#AWS SETUP
 # steps:
 # - name: upload
 #   image: plugins/s3
