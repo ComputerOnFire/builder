@@ -72,14 +72,8 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/* #/**/*/images/*
-    target: /
-    strip_prefix: images/
-    exclude:
-      - images/*.torrent
-      - images/*.img
-      - images/*.zip
-      - images/*.aria2
+    source: build #/**/*/images/*
+    target: experiment #strip_prefix: build
   when:
     branch:
       exclude:
@@ -127,14 +121,8 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/* #/**/*/images/*
-    target: /
-    strip_prefix: images/
-    exclude:
-      - images/*.torrent
-      - images/*.img
-      - images/*.zip
-      - images/*.aria2
+    source: build # images/*
+    target: / #strip_prefix: images/
   when:
     branch:
     - master
@@ -224,14 +212,8 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/* #/**/*/images/*
-    target: /
-    strip_prefix: images/
-    exclude:
-      - images/*.torrent
-      - images/*.img
-      - images/*.zip
-      - images/*.aria2
+    source: build #/**/*/images/*
+    target: experiment #strip_prefix: build
   when:
     event:
       include:
@@ -276,14 +258,8 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: images/* #/**/*/images/*
-    target: /
-    strip_prefix: images/
-    exclude:
-      - images/*.torrent
-      - images/*.img
-      - images/*.zip
-      - images/*.aria2
+    source: build #/**/*/images/*
+    target: / #strip_prefix: build
   when:
     branch:
     - master
