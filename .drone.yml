@@ -72,14 +72,14 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/*/images/* #images/*
-    target: /experiment/
-    strip_prefix: /drone/src/images/
+    source: images/* #/**/*/images/*
+    target: /
+    strip_prefix: images/
     exclude:
-      - /drone/src/images/*.torrent
-      - /drone/src/images/*.img
-      - /drone/src/images/*.zip
-      - /drone/src/images/*.aria2
+      - images/*.torrent
+      - images/*.img
+      - images/*.zip
+      - images/*.aria2
   when:
     branch:
       exclude:
@@ -127,14 +127,14 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/*/images/* #images/*
+    source: images/* #/**/*/images/*
     target: /
-    strip_prefix: /drone/src/images/
+    strip_prefix: images/
     exclude:
-      - /drone/src/images/*.torrent
-      - /drone/src/images/*.img
-      - /drone/src/images/*.zip
-      - /drone/src/images/*.aria2
+      - images/*.torrent
+      - images/*.img
+      - images/*.zip
+      - images/*.aria2
   when:
     branch:
     - master
@@ -224,14 +224,14 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/*/images/* #images/*
-    target: /experiment/
-    strip_prefix: /drone/src/images/
+    source: images/* #/**/*/images/*
+    target: /
+    strip_prefix: images/
     exclude:
-      - /drone/src/images/*.torrent
-      - /drone/src/images/*.img
-      - /drone/src/images/*.zip
-      - /drone/src/images/*.aria2
+      - images/*.torrent
+      - images/*.img
+      - images/*.zip
+      - images/*.aria2
   when:
     event:
       include:
@@ -276,14 +276,14 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/*/images/* #images/*
+    source: images/* #/**/*/images/*
     target: /
-    strip_prefix: /drone/src/images/
+    strip_prefix: images/
     exclude:
-      - /drone/src/images/*.torrent
-      - /drone/src/images/*.img
-      - /drone/src/images/*.zip
-      - /drone/src/images/*.aria2
+      - images/*.torrent
+      - images/*.img
+      - images/*.zip
+      - images/*.aria2
   when:
     branch:
     - master
