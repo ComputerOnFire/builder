@@ -134,8 +134,6 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
-- name: bin
-  temp: {}
 
 ---
 kind: pipeline
@@ -271,8 +269,6 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
-- name: bin
-  temp: {}
 
 #AWS STUFF HERE
 # steps:
