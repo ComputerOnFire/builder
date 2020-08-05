@@ -5,7 +5,7 @@ source lib.sh
 INSTALL_PACKAGES=(
     avahi-daemon vim lshw iotop screen tmux # essentials
     docker-ce aufs-dkms- # docker
-    quicksynergy # dogi
+    # quicksynergy # dogi
     matchbox-keyboard # virtual keyboard
     mdadm initramfs-tools rsync # for RAID1
     elinks links lynx # text mode web browser
@@ -27,7 +27,7 @@ INSTALL_PACKAGES=(
     htop
     speedtest-cli # speedtest.net
     libffi-dev # for building docker-compose using pip
-    python3-coral-enviro # Coral environmental board
+    # python3-coral-enviro # Coral environmental board, disabled for arm64 builds
     bc # for memory command
     libusb-dev # for usb.sh
     dnsutils
@@ -36,14 +36,24 @@ INSTALL_PACKAGES=(
     sl
     mc ranger
     bats # unit testing
-    libhdf5-dev libatlas-base-dev libjasper1 libqt4-test # opencv
+    libhdf5-dev libatlas-base-dev libqt4-test # opencv libjasper1
     imagemagick # tiv
     python3-bcrypt python3-nacl # fix slow pip
+)
+
+ARMHF_PACKAGES=( #packages which do not work on arm64
+    quicksynergy
+    libjasper1
 )
 
 if [[ ${INSTALL_PACKAGES:-} ]] ; then
     echo "Installing ${INSTALL_PACKAGES[*]}"
     _apt install "${INSTALL_PACKAGES[@]}" || die "Could not install ${INSTALL_PACKAGES[*]}"
+    #if _apt install "${INSTALL_PACKAGES[@]}" | grep -q 'Unable to connect to '; then
+        #_apt install "${INSTALL_PACKAGES[@]}" || die "Could not install ${INSTALL_PACKAGES[*]}"
+    #fi
+elif ! uname -m | grep -q "aarch64" && [[ ${ARMHF_PACKAGES:-} ]] ; then
+    _apt install "${ARMHF_PACKAGES[@]}" || die "Could not install ${ARMHF_PACKAGES[*]}"
 fi
 
 _op _chroot apt-mark hold tor #TODO bring back to upstream

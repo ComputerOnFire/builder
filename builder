@@ -1,12 +1,20 @@
 #!/bin/bash
 # Download Raspbian Image, remove first-boot stuff, add repos and install packages.
+arch=$2
 
 # Raspbian
 #RASPBIAN_TORRENT_URL=downloads.raspberrypi.org/raspbian/images/raspbian-2020-02-14/2020-02-13-raspbian-buster.zip.torrent
-RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-05-28/2020-05-27-raspios-buster-armhf.zip.torrent
-
+if [[ "$arch" == "--arm64" ]]; then
+    RASPBIAN_TORRENT_URL=https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2020-05-28/2020-05-27-raspios-buster-arm64.zip.torrent
+    RASPBIAN_SHA256=d06d8eecfa3980e18f9061777ca2dac50d98037373e1bd04e8726d79467dc7c7
+elif [[ "$arch" == "--armhf" ]]; then
+    RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-05-28/2020-05-27-raspios-buster-armhf.zip.torrent
+    RASPBIAN_SHA256=b9a5c5321b3145e605b3bcd297ca9ffc350ecb1844880afd8fb75a7589b7bd04
+else
+    echo "Please specify an architecture"
+fi
 #RASPBIAN_SHA256=a82ed4139dfad31c3167e60e943bcbe28c404d1858f4713efe5530c08a419f50
-RASPBIAN_SHA256=b9a5c5321b3145e605b3bcd297ca9ffc350ecb1844880afd8fb75a7589b7bd04
+#RASPBIAN_SHA256=b9a5c5321b3145e605b3bcd297ca9ffc350ecb1844880afd8fb75a7589b7bd04
 
 RASPBIAN_IMAGE_FILE=$(basename $RASPBIAN_TORRENT_URL | sed -e "s/.zip.torrent/.img/g")
 
@@ -17,14 +25,14 @@ MINIMAL_SPACE_LEFT=111111
 source lib.sh
 
 missing_deps=()
-for prog in kpartx wget gpg parted qemu-arm-static aria2c jq curl; do
+for prog in kpartx wget gpg parted aria2c jq curl qemu-arm-static; do # qemu-arm-static
     if ! type $prog &>/dev/null ; then
         missing_deps+=( "$prog" )
     fi
 done
 if (( ${#missing_deps[@]} > 0 )) ; then
     die "Missing required programs: ${missing_deps[*]}
-    On Debian/Ubuntu try 'sudo apt install kpartx qemu-user-static parted wget curl jq aria2'"
+    On Debian/Ubuntu try 'sudo apt install kpartx parted wget curl jq aria2'" # qemu-user-static
 
 fi
 
@@ -45,7 +53,7 @@ function _get_image {
     if [ ! -f "$RASPBIAN_TORRENT" ]; then
       wget "$RASPBIAN_TORRENT_URL" -O "$RASPBIAN_TORRENT" || die "Download of $RASPBIAN_TORRENT failed"
     fi
-    aria2c --continue "$RASPBIAN_TORRENT" -d images --seed-time 0
+    aria2c --enable-dht=true --bt-enable-lpd=true --continue "$RASPBIAN_TORRENT" -d images --seed-time 0 
     echo -n "Checksum of "
     sha256sum --strict --check - <<<"$RASPBIAN_SHA256 *$IMAGE_ZIP" || die "Download checksum validation failed, please check http://www.raspberrypi.org/downloads"
 }
@@ -92,9 +100,16 @@ function _resize_image {
     fi
 
     start_sector=$(fdisk -l "$RESIZE_IMAGE_PATH" | awk -F" "  '{ print $2 }' | sed '/^$/d' | sed -e '$!d')
+    losetup -a
+    LOOP_BASE=$(losetup -a | grep -c 'loop') #formerly loop0, loop1, loop2
+    echo "LOOP BASE: $LOOP_BASE"
+    LOOP_ONE=$(( LOOP_BASE + 1 ))
+    echo "LOOP ONE: $LOOP_ONE"
+    LOOP_TWO=$(( LOOP_BASE + 2 ))
+    echo "LOOP TWO: $LOOP_TWO"
     truncate -s +$EXTRA_IMAGE_SIZE "$RESIZE_IMAGE_PATH"
-    losetup /dev/loop6 "$RESIZE_IMAGE_PATH"
-    fdisk /dev/loop6 <<EOF
+    losetup "/dev/loop$LOOP_ONE" "$RESIZE_IMAGE_PATH"
+    fdisk "/dev/loop$LOOP_ONE" <<EOF
 p
 d
 2
@@ -106,11 +121,11 @@ $start_sector
 p
 w
 EOF
-    losetup -d /dev/loop6
-    losetup -o $((start_sector*512)) /dev/loop7 "$RESIZE_IMAGE_PATH"
-    e2fsck -f /dev/loop7
-    resize2fs -f /dev/loop7
-    losetup -d /dev/loop7
+    losetup -d "/dev/loop$LOOP_TWO"
+    losetup -o $((start_sector*512)) "/dev/loop$LOOP_TWO" "$RESIZE_IMAGE_PATH"
+    e2fsck -f "/dev/loop$LOOP_TWO"
+    resize2fs -f "/dev/loop$LOOP_TWO"
+    losetup -d "/dev/loop$LOOP_TWO"
     if [[ -L "images" ]];
     then
         rsync -Pav "$RASPBIAN_IMAGE_FILE" images/
@@ -120,7 +135,7 @@ EOF
 
 function _open_image {
     echo "Stupid Snaps"
-    df -h | grep 'loop'
+    losetup -a | grep 'loop'
     echo "Loop-back mounting" "images/$RASPBIAN_IMAGE_FILE"
     # shellcheck disable=SC2086
     kpartx="$(kpartx -sav images/$RASPBIAN_IMAGE_FILE)" || die "Could not setup loop-back access to $RASPBIAN_IMAGE_FILE:$NL$kpartx"
@@ -168,7 +183,8 @@ function _cleanup_chroot {
 }
 
 function _check_space_left {
-    space_left=$(df | grep 'dev/mapper/loop5p2' | awk '{printf $4}')
+    df | grep 'loop'
+    space_left=$(df | grep "dev/mapper/loop$LOOP_BASE\p2" | awk '{printf("%d\n",$4)}')
     echo "Space left: ${space_left}K"
 }
 
