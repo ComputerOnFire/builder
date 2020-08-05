@@ -44,6 +44,7 @@ done
 mkdir -p mnt/img_root/root/.docker
 touch mnt/img_root/root/.docker/config.json
 echo '{"experimental": "enabled"}' > mnt/img_root/root/.docker/config.json
+touch /root/.docker/config.json
 echo '{"experimental": "enabled"}' > /root/.docker/config.json
 
 #mkdir -p "$OLD/mnt/img_root/root/.docker"
