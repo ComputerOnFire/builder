@@ -42,7 +42,7 @@ for image in "${IMAGES[@]}" ; do
 done
 
 mkdir -p mnt/img_root/root/.docker
-#touch mnt/img_root/root/.docker/config.json
+touch mnt/img_root/root/.docker/config.json
 echo '{"experimental": "enabled"}' > mnt/img_root/root/.docker/config.json
 echo '{"experimental": "enabled"}' > /root/.docker/config.json
 
