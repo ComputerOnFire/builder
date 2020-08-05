@@ -68,7 +68,7 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: build/* # 
+    source: build/*  
     target: / 
     strip_prefix: build/
   when:
