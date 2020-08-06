@@ -32,6 +32,51 @@ steps:
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
+- name: deploy-master
+  image: balenalib/armv7hf-golang
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
+  commands:
+  - pwd
+  - apt-get update
+  - apt-get install rsync git ssh -y
+  #- git fetch --tags
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - .drone/environment.sh
+  - echo "$experiment"
+  - echo "$image_path"
+  - .drone/compress.sh
+  - .drone/upload.sh
+  when:
+    branch:
+    - master
+    event:
+      include:
+        - tag
+
+- name: s3-master
+  image: plugins/s3
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: build/*
+    strip_prefix: build/
+    target: /
+  when:
+    branch:
+    - master
+    event:
+      include:
+        - tag
+
 - name: deploy-experiment
   image: balenalib/armv7hf-golang
   volumes:
@@ -69,57 +114,12 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: build/*
-    target: experiment
     strip_prefix: build/
+    target: experiment
   when:
     branch:
       exclude:
         - master
-    event:
-      include:
-        - tag
-
-- name: deploy-master
-  image: balenalib/armv7hf-golang
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
-  privileged: true
-  commands:
-  - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
-  #- git fetch --tags
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - .drone/environment.sh
-  - echo "$experiment"
-  - echo "$image_path"
-  - .drone/compress.sh
-  - .drone/upload.sh
-  when:
-    branch:
-    - master
-    event:
-      include:
-        - tag
-
-- name: s3-master
-  image: plugins/s3
-  settings:
-    bucket: treehouses
-    access_key:
-      from_secret: aws_id
-    secret_key:
-      from_secret: aws_secret
-    source: build/*
-    target: /
-    strip_prefix: build/
-  when:
-    branch:
-    - master
     event:
       include:
         - tag
@@ -164,6 +164,51 @@ steps:
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
+- name: deploy-master
+  image: balenalib/aarch64-golang
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  environment:
+    ssh_deploy_key:
+      from_secret: ssh_secret
+  privileged: true
+  commands:
+  - pwd
+  - apt-get update
+  - apt-get install rsync git ssh -y
+  #- git fetch --tags
+  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
+  - .drone/environment.sh
+  - echo "$experiment"
+  - echo "$image_path"
+  - .drone/compress.sh
+  - .drone/upload.sh
+  when:
+    branch:
+    - master
+    event:
+      include:
+        - tag
+
+- name: s3-master
+  image: plugins/s3
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: build/*
+    strip_prefix: build/
+    target: /
+  when:
+    branch:
+    - master
+    event:
+      include:
+        - tag
+
 - name: deploy-experiment
   image: balenalib/aarch64-golang
   volumes:
@@ -201,57 +246,12 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: build/*
-    target: experiment
     strip_prefix: build/
+    target: experiment
   when:
     branch:
       exclude:
         - master
-    event:
-      include:
-        - tag
-
-- name: deploy-master
-  image: balenalib/aarch64-golang
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
-  privileged: true
-  commands:
-  - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
-  #- git fetch --tags
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - .drone/environment.sh
-  - echo "$experiment"
-  - echo "$image_path"
-  - .drone/compress.sh
-  - .drone/upload.sh
-  when:
-    branch:
-    - master
-    event:
-      include:
-        - tag
-
-- name: s3-master
-  image: plugins/s3
-  settings:
-    bucket: treehouses
-    access_key:
-      from_secret: aws_id
-    secret_key:
-      from_secret: aws_secret
-    source: build/*
-    target: /
-    strip_prefix: build/
-  when:
-    branch:
-    - master
     event:
       include:
         - tag
