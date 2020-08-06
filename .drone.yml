@@ -39,7 +39,7 @@ steps:
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - .drone/compress.sh
+  - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
     branch:
@@ -82,7 +82,7 @@ steps:
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - .drone/compress.sh
+  - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
     branch:
@@ -158,7 +158,7 @@ steps:
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - .drone/compress.sh
+  - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
     branch:
@@ -201,7 +201,7 @@ steps:
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - .drone/compress.sh
+  - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
     branch:
