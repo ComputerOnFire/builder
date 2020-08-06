@@ -8,6 +8,14 @@ echo "Balena installation"
 releases=$(curl -s https://api.github.com/repos/balena-os/balena-engine/releases/latest -H "Authorization: token $GITHUB_KEY" | jq -r ".assets[].browser_download_url")
 armv6link=$(echo "$releases" | tr " " "\\n" | grep armv6)
 armv7link=$(echo "$releases" | tr " " "\\n" | grep armv7)
+arm64link=$(echo "$releases" | tr " " "\\n" | grep aarch64)
+
+# arm64
+wget -c "$arm64link"
+tar xvzf "$(basename "$arm64link")" ./balena-engine/balena-engine
+mv balena-engine/balena-engine mnt/img_root/usr/bin/balena-engine-aarch64
+_op _chroot chown root:root /usr/bin/balena-engine-aarch64
+rm -rf balena-engine/
 
 # armv7
 wget -c "$armv7link"
