@@ -7,7 +7,7 @@ platform:
 
 steps:
 - name: build
-  image: balenalib/armv7hf-golang
+  image: johndockenson/runner-armhf
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -19,21 +19,12 @@ steps:
   - git fetch --tags
   - df -h
   - losetup -a
-  - apt-get update
-  - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs npm git apt-transport-https ca-certificates gnupg-agent software-properties-common -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce -y
-  - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
 - name: deploy-master
-  image: balenalib/armv7hf-golang
+  image: johndockenson/runner-armhf
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -43,8 +34,6 @@ steps:
   privileged: true
   commands:
   - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
@@ -78,7 +67,7 @@ steps:
         - tag
 
 - name: deploy-experiment
-  image: balenalib/armv7hf-golang
+  image: johndockenson/runner-armhf
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -88,8 +77,6 @@ steps:
   privileged: true
   commands:
   - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
@@ -139,7 +126,7 @@ platform:
 
 steps:
 - name: build
-  image: balenalib/aarch64-golang
+  image: johndockenson/runner-arm64
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -151,21 +138,12 @@ steps:
   - git fetch --tags
   - df -h
   - losetup -a
-  - apt-get update
-  - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs npm git apt-transport-https ca-certificates gnupg-agent software-properties-common -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce -y
-  - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
 - name: deploy-master
-  image: balenalib/aarch64-golang
+  image: johndockenson/runner-arm64
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -175,8 +153,6 @@ steps:
   privileged: true
   commands:
   - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
@@ -210,7 +186,7 @@ steps:
         - tag
 
 - name: deploy-experiment
-  image: balenalib/aarch64-golang
+  image: johndockenson/runner-arm64
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -220,8 +196,6 @@ steps:
   privileged: true
   commands:
   - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
