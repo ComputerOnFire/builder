@@ -68,8 +68,8 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: build/*  
-    target: / 
+    source: build/*
+    target: experiment
     strip_prefix: build/
   when:
     branch:
@@ -115,7 +115,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: build/*
-    target: / 
+    target: /
     strip_prefix: build/
   when:
     branch:
@@ -201,7 +201,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: build/*
-    target: / 
+    target: experiment
     strip_prefix: build/
   when:
     branch:
@@ -247,7 +247,7 @@ steps:
     secret_key:
       from_secret: aws_secret
     source: build/*
-    target: / 
+    target: /
     strip_prefix: build/
   when:
     branch:
