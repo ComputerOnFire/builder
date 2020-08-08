@@ -42,8 +42,6 @@ steps:
   - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
-    branch:
-    - master
     event:
       include:
         - tag
