@@ -49,7 +49,6 @@ function _umount {
 
 # function _get_image {
 #     echo "Fetching $RASPBIAN_TORRENT_URL"
-#     mkdir -p images
 #     if [ ! -f "$RASPBIAN_TORRENT" ]; then
 #       wget "$RASPBIAN_TORRENT_URL" -O "$RASPBIAN_TORRENT" || die "Download of $RASPBIAN_TORRENT failed"
 #     fi
