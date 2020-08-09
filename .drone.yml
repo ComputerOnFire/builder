@@ -17,6 +17,7 @@ steps:
   privileged: true
   commands:
   - mv /go/images /drone/src
+  - ls images
   - git fetch --tags
   - df -h
   - losetup -a
