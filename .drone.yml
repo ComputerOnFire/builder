@@ -21,6 +21,7 @@ steps:
   - losetup -a
   - dmsetup remove_all
   - losetup -D
+  - ls images
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
 - name: deploy
