@@ -7,7 +7,7 @@ platform:
 
 steps:
 - name: build
-  image: balenalib/armv7hf-golang
+  image: johndockenson/runner-armhf
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -19,21 +19,12 @@ steps:
   - git fetch --tags
   - df -h
   - losetup -a
-  - apt-get update
-  - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-arm-linux-gnueabihf nodejs npm git apt-transport-https ca-certificates gnupg-agent software-properties-common -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce -y
-  - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
-- name: deploy-experiment
-  image: balenalib/armv7hf-golang
+- name: deploy
+  image: johndockenson/runner-armhf
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -43,64 +34,14 @@ steps:
   privileged: true
   commands:
   - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - .drone/compress.sh
+  - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
-    branch:
-      exclude:
-        - master
-    event:
-      include:
-        - tag
-
-- name: s3-experiment
-  image: plugins/s3
-  settings:
-    bucket: treehouses
-    access_key:
-      from_secret: aws_id
-    secret_key:
-      from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
-  when:
-    branch:
-      exclude:
-        - master
-    event:
-      include:
-        - tag
-
-- name: deploy-master
-  image: balenalib/armv7hf-golang
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
-  privileged: true
-  commands:
-  - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
-  #- git fetch --tags
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - .drone/environment.sh
-  - echo "$experiment"
-  - echo "$image_path"
-  - .drone/compress.sh
-  - .drone/upload.sh
-  when:
-    branch:
-    - master
     event:
       include:
         - tag
@@ -113,11 +54,31 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
+    source: build/*
+    strip_prefix: build/
+    target: /
   when:
     branch:
     - master
+    event:
+      include:
+        - tag
+
+- name: s3-experiment
+  image: plugins/s3
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: build/*
+    strip_prefix: build/
+    target: experiment
+  when:
+    branch:
+      exclude:
+        - master
     event:
       include:
         - tag
@@ -137,7 +98,7 @@ platform:
 
 steps:
 - name: build
-  image: balenalib/aarch64-golang
+  image: johndockenson/runner-arm64
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -149,21 +110,12 @@ steps:
   - git fetch --tags
   - df -h
   - losetup -a
-  - apt-get update
-  - apt-get dist-upgrade -y
-  - apt-get install kpartx parted wget curl jq aria2 unzip python3 python3-pip qemu-user-static dmsetup g++-aarch64-linux-gnu nodejs npm git apt-transport-https ca-certificates gnupg-agent software-properties-common -y
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-  - apt-key fingerprint 0EBFCD88
-  - add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-  - apt-get update
-  - apt-get install docker-ce -y
-  - python3 -m pip install requests
   - dmsetup remove_all
   - losetup -D
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
-- name: deploy-experiment
-  image: balenalib/aarch64-golang
+- name: deploy
+  image: johndockenson/runner-arm64
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -173,64 +125,14 @@ steps:
   privileged: true
   commands:
   - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
   #- git fetch --tags
   - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
   - .drone/environment.sh
   - echo "$experiment"
   - echo "$image_path"
-  - .drone/compress.sh
+  - .drone/compress.sh #split these steps!
   - .drone/upload.sh
   when:
-    branch:
-      exclude:
-        - master
-    event:
-      include:
-        - tag
-
-- name: s3-experiment
-  image: plugins/s3
-  settings:
-    bucket: treehouses
-    access_key:
-      from_secret: aws_id
-    secret_key:
-      from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
-  when:
-    branch:
-      exclude:
-        - master
-    event:
-      include:
-        - tag
-
-- name: deploy-master
-  image: balenalib/aarch64-golang
-  volumes:
-  - name: dockersock
-    path: /var/run/docker.sock
-  environment:
-    ssh_deploy_key:
-      from_secret: ssh_secret
-  privileged: true
-  commands:
-  - pwd
-  - apt-get update
-  - apt-get install rsync git ssh -y
-  #- git fetch --tags
-  - echo "$ssh_deploy_key" | base64 --decode --ignore-garbage > .drone/id_deploy
-  - .drone/environment.sh
-  - echo "$experiment"
-  - echo "$image_path"
-  - .drone/compress.sh
-  - .drone/upload.sh
-  when:
-    branch:
-    - master
     event:
       include:
         - tag
@@ -243,11 +145,31 @@ steps:
       from_secret: aws_id
     secret_key:
       from_secret: aws_secret
-    source: /**/build/* # build/*
-    target: / #strip_prefix: build/
+    source: build/*
+    strip_prefix: build/
+    target: /
   when:
     branch:
     - master
+    event:
+      include:
+        - tag
+
+- name: s3-experiment
+  image: plugins/s3
+  settings:
+    bucket: treehouses
+    access_key:
+      from_secret: aws_id
+    secret_key:
+      from_secret: aws_secret
+    source: build/*
+    strip_prefix: build/
+    target: experiment
+  when:
+    branch:
+      exclude:
+        - master
     event:
       include:
         - tag
@@ -256,19 +178,6 @@ volumes:
 - name: dockersock
   host:
     path: /var/run/docker.sock
-
-#AWS STUFF HERE
-# steps:
-# - name: upload
-#   image: plugins/s3
-#   settings:
-#     bucket: my-bucket-name
-#     access_key:
-#       from_secret: aws_access_key_id
-#     secret_key:
-#       from_secret: aws_secret_access_key
-#     source: public/**/*
-#     target: /target/location
     
 ---
 kind: secret
