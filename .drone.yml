@@ -17,7 +17,7 @@ steps:
   privileged: true
   commands:
   - apt-get install tree -y
-  - tree
+  - tree /
   - git fetch --tags
   - df -h
   - losetup -a
