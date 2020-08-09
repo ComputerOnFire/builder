@@ -16,6 +16,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - tree
   - git fetch --tags
   - df -h
   - losetup -a
