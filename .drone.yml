@@ -7,7 +7,7 @@ platform:
 
 steps:
 - name: build
-  image: johndockenson/runner-armhf
+  image: johndockenson/runner-armhf:test
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -24,7 +24,7 @@ steps:
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
 - name: deploy
-  image: johndockenson/runner-armhf
+  image: johndockenson/runner-armhf:test
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -98,7 +98,7 @@ platform:
 
 steps:
 - name: build
-  image: johndockenson/runner-arm64
+  image: johndockenson/runner-arm64:test
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -115,7 +115,7 @@ steps:
   - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
 - name: deploy
-  image: johndockenson/runner-arm64
+  image: johndockenson/runner-arm64:test
   volumes:
   - name: dockersock
     path: /var/run/docker.sock

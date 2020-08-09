@@ -271,11 +271,11 @@ echo "$IMAGE_ZIP"
 IMAGE=${IMAGE_ZIP%.zip}.img
 echo "$IMAGE"
 
-if [ ! -e "$IMAGE_ZIP" ]; then
-    _get_image
-fi
+#if [ ! -e "$IMAGE_ZIP" ]; then
+   # _get_image
+#fi
 
-_decompress_image
+#_decompress_image
 _resize_image
 _open_image
 
