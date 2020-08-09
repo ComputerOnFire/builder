@@ -16,8 +16,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  #- apt-get install tree -y
-  - mv /go/images /drone/src/images
+  - mv /go/images/*.img /drone/src/images/*.img
   - git fetch --tags
   - df -h
   - losetup -a
@@ -109,6 +108,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - mv /go/images/*.img /drone/src/images/*.img
   - git fetch --tags
   - df -h
   - losetup -a
