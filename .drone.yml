@@ -16,6 +16,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
+  - apt-get install tree -y
   - tree
   - git fetch --tags
   - df -h
