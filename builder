@@ -47,20 +47,20 @@ function _umount {
     done
 }
 
-function _get_image {
-    echo "Fetching $RASPBIAN_TORRENT_URL"
-    mkdir -p images
-    if [ ! -f "$RASPBIAN_TORRENT" ]; then
-      wget "$RASPBIAN_TORRENT_URL" -O "$RASPBIAN_TORRENT" || die "Download of $RASPBIAN_TORRENT failed"
-    fi
-    aria2c --enable-dht=true --bt-enable-lpd=true --continue "$RASPBIAN_TORRENT" -d images --seed-time 0 
-    echo -n "Checksum of "
-    sha256sum --strict --check - <<<"$RASPBIAN_SHA256 *$IMAGE_ZIP" || die "Download checksum validation failed, please check http://www.raspberrypi.org/downloads"
-}
+# function _get_image {
+#     echo "Fetching $RASPBIAN_TORRENT_URL"
+#     mkdir -p images
+#     if [ ! -f "$RASPBIAN_TORRENT" ]; then
+#       wget "$RASPBIAN_TORRENT_URL" -O "$RASPBIAN_TORRENT" || die "Download of $RASPBIAN_TORRENT failed"
+#     fi
+#     aria2c --enable-dht=true --bt-enable-lpd=true --continue "$RASPBIAN_TORRENT" -d images --seed-time 0 
+#     echo -n "Checksum of "
+#     sha256sum --strict --check - <<<"$RASPBIAN_SHA256 *$IMAGE_ZIP" || die "Download checksum validation failed, please check http://www.raspberrypi.org/downloads"
+# }
 
-function _decompress_image {
-    unzip -o "$IMAGE_ZIP" -d images || die "Could not unzip $IMAGE_ZIP"
-}
+# function _decompress_image {
+#     unzip -o "$IMAGE_ZIP" -d images || die "Could not unzip $IMAGE_ZIP"
+# }
 
 function _disable_daemons {
     # Prevent services from being started inside the chroot.
