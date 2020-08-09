@@ -7,7 +7,7 @@ platform:
 
 steps:
 - name: build
-  image: johndockenson/runner-armhf:latest
+  image: johndockenson/runner-armhf
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
@@ -16,8 +16,8 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - apt-get install tree -y
-  - tree /
+  #- apt-get install tree -y
+  - mv /go/images /drone/src/images
   - git fetch --tags
   - df -h
   - losetup -a
