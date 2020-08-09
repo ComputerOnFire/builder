@@ -22,7 +22,7 @@ steps:
   - losetup -a
   - dmsetup remove_all
   - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";PATH=./node_modules/.bin:$PATH ./builder --noninteractive --armhf' # --arm64 or --armhf, need to implement in builder
 
 - name: deploy
   image: johndockenson/runner-armhf
@@ -114,7 +114,7 @@ steps:
   - losetup -a
   - dmsetup remove_all
   - losetup -D
-  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";mkdir images && PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
+  - bash -c 'export GITHUB_KEY="$GITHUB_KEY";PATH=./node_modules/.bin:$PATH ./builder --noninteractive --arm64'
 
 - name: deploy
   image: johndockenson/runner-arm64
