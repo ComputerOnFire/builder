@@ -16,7 +16,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - mv /go/images/*.img /drone/src/images/*.img
+  - mv /go/images /drone/src
   - git fetch --tags
   - df -h
   - losetup -a
@@ -108,7 +108,7 @@ steps:
       from_secret: api_key
   privileged: true
   commands:
-  - mv /go/images/*.img /drone/src/images/*.img
+  - mv /go/images /drone/src
   - git fetch --tags
   - df -h
   - losetup -a
